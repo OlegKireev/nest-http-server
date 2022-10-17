@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateRoleDto } from './dto/create-role-dto';
-import { RoleModel } from './roles.model';
+import { RoleModel } from './role.model';
 
 @Injectable()
-export class RolesService {
+export class RoleService {
   constructor(
-    @InjectModel(RoleModel) private rolesRepository: typeof RoleModel,
+    @InjectModel(RoleModel) private roleRepository: typeof RoleModel,
   ) {}
 
   async createRole(dto: CreateRoleDto) {
@@ -14,13 +14,13 @@ export class RolesService {
       ...dto,
       value: dto.value.toUpperCase(),
     };
-    const role = await this.rolesRepository.create(upperCasedValue);
+    const role = await this.roleRepository.create(upperCasedValue);
     return role;
   }
 
   async getRoleByValue(value: string) {
     const upperCassedValue = value.toUpperCase();
-    const role = await this.rolesRepository.findOne({
+    const role = await this.roleRepository.findOne({
       where: { value: upperCassedValue },
     });
     return role;

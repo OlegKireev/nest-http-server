@@ -6,16 +6,16 @@ import {
   BelongsToMany,
 } from 'sequelize-typescript';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserModel } from 'users/users.model';
-import { UserRoleModel } from 'user-roles/user-roles.model';
+import { UserModel } from 'user/user.model';
+import { UserRoleModel } from 'user-role/user-role.model';
 
-interface RolesCreationAttrs {
+interface RoleCreationAttrs {
   value: string;
   description: string;
 }
 
 @Table({ tableName: 'roles' })
-export class RoleModel extends Model<RoleModel, RolesCreationAttrs> {
+export class RoleModel extends Model<RoleModel, RoleCreationAttrs> {
   @ApiProperty({
     example: 1,
     description: 'Уникальный идентификатор роли',

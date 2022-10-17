@@ -5,10 +5,10 @@ import {
   Table,
   ForeignKey,
 } from 'sequelize-typescript';
-import { UserModel } from 'users/users.model';
-import { RoleModel } from 'roles/roles.model';
+import { UserModel } from 'user/user.model';
+import { RoleModel } from 'role/role.model';
 
-@Table({ tableName: 'user_roles', createdAt: false, updatedAt: false })
+@Table({ tableName: 'user_role', createdAt: false, updatedAt: false })
 export class UserRoleModel extends Model<UserRoleModel> {
   @Column({
     type: DataType.INTEGER,
