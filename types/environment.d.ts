@@ -10,6 +10,7 @@ declare global {
       POSTGRES_DB: string;
       POSTGRES_USER: string;
       POSTGRES_PASSWORD: string;
+      SECRET_JWT_KEY: string;
     }
   }
 }
