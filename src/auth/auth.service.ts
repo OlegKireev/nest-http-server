@@ -1,9 +1,15 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateUserDto } from 'user/dto/create-user-dto';
 import { UserModel } from 'user/user.model';
 import { UserService } from 'user/user.service';
 import { JwtService } from '@nestjs/jwt';
-import { hash } from 'bcryptjs';
+import { hash, compare } from 'bcryptjs';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -12,7 +18,8 @@ export class AuthService {
   ) {}
 
   async login(dto: CreateUserDto) {
-    console.log('');
+    const user = await this.validateUser(dto);
+    return this.generateToken(user);
   }
 
   async registration(dto: CreateUserDto) {
@@ -34,7 +41,7 @@ export class AuthService {
     return this.generateToken(user);
   }
 
-  async generateToken(user: UserModel) {
+  private async generateToken(user: UserModel) {
     const payload = {
       email: user.email,
       id: user.id,
@@ -44,5 +51,21 @@ export class AuthService {
     return {
       token: this.jwtService.sign(payload),
     };
+  }
+
+  private async validateUser(dto: CreateUserDto) {
+    const user = await this.userService.getUserByEmail(dto.email);
+
+    if (!user) {
+      throw new UnauthorizedException('Неверный логин или пароль');
+    }
+
+    const isPasswordEquals = await compare(dto.password, user.password);
+
+    if (!isPasswordEquals) {
+      throw new UnauthorizedException('Неверный логин или пароль');
+    }
+
+    return user;
   }
 }
